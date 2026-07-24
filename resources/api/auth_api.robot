@@ -11,5 +11,5 @@ Create API Session
 Send Login Request
     [Arguments]    ${username}    ${password}
     ${payload}=    Create Dictionary    username=${username}    password=${password}
-    ${response}=    POST On Session    api    /auth/login    json=${payload}    expected_status=any
+    ${response}=    POST On Session    api    auth    json=${payload}    expected_status=any
     RETURN    ${response}
