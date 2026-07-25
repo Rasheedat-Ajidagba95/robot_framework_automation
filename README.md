@@ -17,10 +17,14 @@ built with Robot Framework and the Browser (Playwright) + Requests libraries.
 Tests describe *what* to check; resources hold *how* it's done; all
 environment data lives in `variables/env.py`.
 
+
 ## Setup
 
     pip install -r requirements.txt
     rfbrowser init          # installs Playwright browsers (first time only)
+
+    CI runs pip install -r requirements.txt, and without this line import dotenv in env.py will crash on the CI machine
+
 
 ## Running
 

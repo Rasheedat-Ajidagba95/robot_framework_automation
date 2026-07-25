@@ -1,18 +1,5 @@
-# Python
-__pycache__/
-.venv/
-*.pyc
-
-# Robot Framework output
+.env
 output.xml
 log.html
 report.html
-/browser/
-
-# Playwright
-playwright-log.txt
-
-# Editor / local exploration
-.playwright-mcp/
-.vscode/
-*.png
+__pycache__/
