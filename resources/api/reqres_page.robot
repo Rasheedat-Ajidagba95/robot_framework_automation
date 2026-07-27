@@ -16,15 +16,22 @@ Send Login Request
     RETURN    ${response}
 
 Login With Options
-    [Arguments]    ${email}    ${password}    ${expected_status}=200
+    [Arguments]    ${email}    ${password}    
     
     &{payload}=    Create Dictionary   
 
-    IF    '${email}' != '{EMPTY}'   
+    IF    '${email}' != '${EMPTY}'   
        Set To Dictionary    ${payload}    email    ${email}
     END
-    IF    '${password}' != '{EMPTY}'
+    IF    '${password}' != '${EMPTY}'
        Set To Dictionary    ${payload}    password    ${password}
     END
-    ${response}=    POST On Session    api    api/login    json=${payload}    expected_status=any
+    ${response}=    POST On Session    api    api/login    json=${payload}    expected_status=any 
     RETURN    ${response}
+
+Send Register Request
+    [Arguments]    ${email}    ${password}
+    &{payload}=    Create Dictionary    email=${email}    password=${password}
+    ${response}=    POST On Session    api    api/register    json=${payload}    expected_status=any
+    RETURN    ${response}
+

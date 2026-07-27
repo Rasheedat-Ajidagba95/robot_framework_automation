@@ -1,5 +1,6 @@
 *** Settings ***
-Resource         ../../resources/ui/login_page.robot
+Resource    ../../resources/ui/login_page.robot
+
 Test Setup       Open Login Page
 Test Teardown    Close Browser
 
@@ -14,3 +15,6 @@ Invalid Login Shows An Error Message
     [Tags]    ui    negative    auth
     Login As    ${ADMIN_USER}    wrongpassword
     Login Should Fail With Error    Invalid credentials
+
+
+

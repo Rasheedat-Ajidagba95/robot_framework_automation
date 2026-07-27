@@ -1,0 +1,312 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "ReqRes API (tested subset)",
+    "version": "1.0.0",
+    "description": "Trimmed OpenAPI spec covering only the endpoints exercised by this test suite. Full reqres spec: https://reqres.in/openapi.json"
+  },
+  "servers": [
+    { "url": "https://reqres.in" }
+  ],
+  "security": [
+    { "ApiKeyAuth": [] }
+  ],
+  "paths": {
+    "/api/login": {
+      "post": {
+        "summary": "Authenticate a user and return a token",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Credentials" },
+              "example": { "email": "eve.holt@reqres.in", "password": "cityslicka" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" },
+                "example": { "token": "QpwL5tke4Pnpja7X4" }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing password",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": { "error": "Missing password" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/register": {
+      "post": {
+        "summary": "Register a (predefined) user and return a token",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Credentials" },
+              "example": { "email": "eve.holt@reqres.in", "password": "pistol" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registration successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenResponse" },
+                "example": { "id": 4, "token": "QpwL5tke4Pnpja7X4" }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing password",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "example": { "error": "Missing password" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/users": {
+      "post": {
+        "summary": "Create a user",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserMutation" },
+              "example": { "name": "neo", "job": "the one" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CreatedResponse" },
+                "example": { "name": "neo", "job": "the one", "id": "638", "createdAt": "2024-01-01T00:00:00.000Z" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "summary": "Get a single user by id",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "example": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SingleUserResponse" }
+              }
+            }
+          },
+          "404": { "description": "User not found (empty body)" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "put": {
+        "summary": "Update a user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "example": 2
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserMutation" },
+              "example": { "name": "morpheus", "job": "zion resident" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MutationResponse" },
+                "example": { "name": "morpheus", "job": "zion resident", "updatedAt": "2024-01-01T00:00:00.000Z" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "patch": {
+        "summary": "Partially update a user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "example": 2
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserMutation" },
+              "example": { "job": "tester" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated. Response echoes only the sent field(s) plus updatedAt.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MutationResponse" },
+                "example": { "job": "tester", "updatedAt": "2024-01-01T00:00:00.000Z" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "example": 2
+          }
+        ],
+        "responses": {
+          "204": { "description": "User deleted (no content)" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Free key from https://app.reqres.in/api-keys. A missing or invalid key returns 401."
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Missing or invalid x-api-key header",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": { "error": "missing_api_key", "message": "The x-api-key header is required for this endpoint." }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Credentials": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "token": { "type": "string" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" },
+          "message": { "type": "string" }
+        },
+        "required": ["error"]
+      },
+      "SingleUserResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "email": { "type": "string" },
+              "first_name": { "type": "string" },
+              "last_name": { "type": "string" },
+              "avatar": { "type": "string" }
+            }
+          }
+        }
+      },
+      "UserMutation": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "job": { "type": "string" }
+        }
+      },
+      "MutationResponse": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "job": { "type": "string" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CreatedResponse": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "job": { "type": "string" },
+          "id": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
